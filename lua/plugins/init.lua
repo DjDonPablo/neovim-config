@@ -202,6 +202,12 @@ local rosepine = {
   end,
 }
 
+local cyberdream = {
+    "scottmckendry/cyberdream.nvim",
+    lazy = false,
+    priority = 1000,
+}
+
 -- ─── Linters / Formatters (null-ls successor) ────────────────────────────
 local none_ls = {
   "nvimtools/none-ls.nvim",
@@ -248,13 +254,34 @@ local cmp = {
   opts_extend = { "sources.default" },
 }
 
--- ─── Linters / Formatters (null-ls successor) ────────────────────────────
+-- local strudel = {
+--   "gruvw/strudel.nvim",
+--   build = "npm ci",
+--   config = function()
+--     require("strudel").setup()
+--   end,
+-- }
+
 local strudel = {
-  "gruvw/strudel.nvim",
-  build = "npm ci",
-  config = function()
-    require("strudel").setup()
-  end,
+    'Goshujinsama/nvim-strudel',
+    ft = 'strudel',
+    build = 'cd server && npm install && npm run build',
+    keys = {
+      { '<C-CR>', '<cmd>StrudelEval<cr>', ft = 'strudel', desc = 'Strudel: Eval' },
+      { '<leader>ss', '<cmd>StrudelStop<cr>', ft = 'strudel', desc = 'Strudel: Stop' },
+    },
+    config = function()
+      require('strudel').setup()
+    end,
+}
+
+local telescope = {
+    'nvim-telescope/telescope.nvim', version = '*',
+    dependencies = {
+        'nvim-lua/plenary.nvim',
+        -- optional but recommended
+        { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+    }
 }
 
 -- ─── Build spec ──────────────────────────────────────────────────────────
@@ -262,7 +289,8 @@ local exist, custom = pcall(require, "custom")
 local custom_plugins = exist and type(custom) == "table" and custom.plugins or {}
 
 local specs = {
-  rosepine,
+  cyberdream,
+  -- rosepine,
   colorizer,
   which_key,
   plenary,
@@ -276,6 +304,7 @@ local specs = {
   none_ls,
   cmp,
   strudel,
+  telescope,
   -- Custom plugins (if any)
   unpack(custom_plugins),
 }
